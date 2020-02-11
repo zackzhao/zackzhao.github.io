@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[2018-4-5_note]]></title>
+    <url>%2F2018%2F04%2F05%2F2018-4-5-note%2F</url>
+    <content type="text"><![CDATA[一天今天一直在做PPT了，避免明天要开组会，做了一份简单介绍目标检测的PPT。包含一点RCNN和YOLO的知识点。所以就记录一下参考的内容 Reference李沐讲解目标检测selective search采用的划分区域方法selective search基于深度学习的目标检测技术演进一文搞懂目标检测]]></content>
+      <categories>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[2018-4-4_note]]></title>
+    <url>%2F2018%2F04%2F04%2F2018-4-4-note%2F</url>
+    <content type="text"><![CDATA[一天上了一天软硬件，这种课，说真的，浪费时间。 论文今天写毕设，发现两个神奇的东西 cnki翻译助手 pdf等论文直接翻译]]></content>
+      <categories>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[2018-4-3_note]]></title>
+    <url>%2F2018%2F04%2F03%2F2018-4-3-note%2F</url>
+    <content type="text"><![CDATA[一天写点毕设，写不动了，写了500字。 opencv简介OpenCV是计算机视觉领域应用最广泛的开源工具包，基于C/C++，支持Linux/Windows/MacOS/Android/iOS，并提供了Python，Matlab和Java等语言的接口。RGB图像在计算机中第一维度是高度，第二维度是宽度，第三个维度是通道数。其中在opencv中第三维度存在顺序是 BGR opencv 基本函数1. 存取图像 读图像用cv2.imread()，可以按照不同模式读取，一般最常用到的是读取单通道灰度图，或者直接默认读取多通道。存图像用cv2.imwrite()，注意存的时候是没有单通道这一说的，根据保存文件名的后缀和当前的array维度，OpenCV自动判断存的通道，另外压缩格式还可以指定存储质量，代码例子：1234567891011121314151617181920import cv2# 读取一张400x600分辨率的图像color_img = cv2.imread('lenna.jpg')print(color_img.shape)# 直接读取单通道gray_img = cv2.imread('lenna.jpg', cv2.IMREAD_GRAYSCALE)print(gray_img.shape)# 把单通道图片保存后，再读取，仍然是3通道，相当于把单通道值复制到3个通道保存cv2.imwrite('test_grayscale.jpg', gray_img)reload_grayscale = cv2.imread('test_grayscale.jpg')print(reload_grayscale.shape)# cv2.IMWRITE_JPEG_QUALITY指定jpg质量，范围0到100，默认95，越高画质越好，文件越大cv2.imwrite('test_imwrite.jpg', color_img, (cv2.IMWRITE_JPEG_QUALITY, 80))# cv2.IMWRITE_PNG_COMPRESSION指定png质量，范围0到9，默认3，越高文件越小，画质越差cv2.imwrite('test_imwrite.png', color_img, (cv2.IMWRITE_PNG_COMPRESSION, 5)) 2. OpenCV窗口OpenCV显示一幅图片的函数是cv2.imshow()，第一个参数是显示图片的窗口名称，第二个参数是图片的array。不过如果直接执行这个函数的话，什么都不会发生，因为这个函数得配合cv2.waitKey()一起使用。cv2.waitKey()指定当前的窗口显示要持续的毫秒数，比如cv2.waitKey(1000)就是显示一秒，然后窗口就关闭了。比较特殊的是cv2.waitKey(0)，并不是显示0毫秒的意思，而是一直显示，直到有键盘上的按键被按下，或者鼠标点击了窗口的小叉子才关闭。cv2.waitKey()的默认参数就是0，所以对于图像展示的场景，cv2.waitKey()或者cv2.waitKey(0)是最常用的：12345import cv2img = cv2.imread('lenna.jpg')cv2.imshow('Lenna', img)cv2.waitKey() 3. 视频功能视频中最常用的就是从视频设备采集图片或者视频，或者读取视频文件并从中采样。所以比较重要的也是两个模块，一个是VideoCapture，用于获取相机设备并捕获图像和视频，或是从文件中捕获。还有一个VideoWriter，用于生成视频。一个延时摄影视频的小例子：123456789101112131415161718192021222324252627282930313233343536373839404142434445import cv2import timeinterval = 60 # 捕获图像的间隔，单位：秒num_frames = 500 # 捕获图像的总帧数out_fps = 24 # 输出文件的帧率# VideoCapture(0)表示打开默认的相机cap = cv2.VideoCapture(0)# 获取捕获的分辨率size =(int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))) # 设置要保存视频的编码，分辨率和帧率video = cv2.VideoWriter( "time_lapse.avi", cv2.VideoWriter_fourcc('M','P','4','2'), out_fps, size)# 对于一些低画质的摄像头，前面的帧可能不稳定，略过for i in range(42): cap.read()# 开始捕获，通过read()函数获取捕获的帧try: for i in range(num_frames): _, frame = cap.read() video.write(frame) # 如果希望把每一帧也存成文件，比如制作GIF，则取消下面的注释 # filename = '&#123;:0&gt;6d&#125;.png'.format(i) # cv2.imwrite(filename, frame) print('Frame &#123;&#125; is captured.'.format(i)) time.sleep(interval)except KeyboardInterrupt: # 提前停止捕获 print('Stopped! &#123;&#125;/&#123;&#125; frames captured!'.format(i, num_frames))# 释放资源并写入视频文件video.release()cap.release() Haar分类器介绍Haar分类器包含以下部分： 使用Haar-like特征做检测。 使用积分图（Integral Image）对Haar-like特征求值进行加速。 使用AdaBoost算法训练区分人脸和非人脸的强分类器。 使用筛选式级联把强分类器级联到一起，提高准确率。Haar-like通俗的来讲，Haar-like就是作为人脸特征。Haar特征值反映了图像的灰度变化情况。例如：脸部的一些特征能由矩形特征简单的描述，如：眼睛要比脸颊颜色要深，鼻梁两侧比鼻梁颜色要深，嘴巴比周围颜色要深等。假设在人脸检测时我们需要有这么一个子窗口在待检测的图片窗口中不断的移位滑动，子窗口每到一个位置，就会计算出该区域的特征，然后用我们训练好的级联分类器对该特征进行筛选，一旦该特征通过了所有强分类器的筛选，则判定该区域为人脸。 ![其中一种特征]!(./images/1522743350520.jpg)将上面的任意一个矩形放到人脸区域上，然后，将白色区域的像素和减去黑色区域的像素和，得到的值我们暂且称之为人脸特征值，如果你把这个矩形放到一个非人脸区域，那么计算出的特征值应该和人脸特征值是不一样的，而且越不一样越好，所以这些方块的目的就是把人脸特征量化，以区分人脸和非人脸。 分类器其他部分原理参考[1].# 主要我也不清楚 使用api检测人脸 读取图片 1img = cv2.imread(imgpath) 灰度转换将读取的图像转换成 cv2.COLOR_BGR2GRAY格式 ,具体的算法可见cvtColor这里的检测的依据是 哈尔特征 ,转换后每个点的RGB数据变成了一维的灰度,计算的强度减小,其实不转换也是可以的.(本文图像测试可行) 1gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) 获取人脸识别训练数据 1face_cascade = cv2.CascadeClassifier(haarpath) 这是初始化opencv的Cascade Classification,详情可参见Cascade Classification , 它的作用就是产生一个检测器,检测的依据全都储存在参数所代表的那个xml文件中,这个xml文件可以在 opencv-github 中获得,官方提供的还有眼睛,树等其他对象的识别数据,这些数据就是一张一张图像训练出来的, 这里 有一篇讲解如何自己训练得到检测数据的. 探测人脸对人脸的识别过程 1234567faces = faceCascade.detectMultiScale( gray, scaleFactor=1.15, minNeighbors=5, minSize=(5,5), flags = cv2.cv.CV_HAAR_SCALE_IMAGE) 这是这段代码中的核心,这几个参数最终决定能否检测出.方法detectMultiScale参数作用.gray : 进行检测的图像,这里是转换后的,scaleFactor : 官网文档说是每次图片缩小的比例,其实可以这么理解,距离相机不同的距离,物体大小是不一样的,在物体大小不一致的情况下识别一个东西是不方便的,这就需要进行多次的缩放,这就是这个参数的作用.minNeighbors : 可以理解为每次检测时,对检测点(Scale)周边多少有效点同时检测,因为可能选取的检测点大小不足而导致遗漏minSize : 检测点的最小值,或者说就是检测点的最终值flags : 这个参数在新版的opencv是不需要的,暂时不管了,注释掉同样可以返回值 ： 是个ndarray是一个二维数组,行数是检测出的对象的个数,每行是检测到的矩形区域的坐标(左上,右下) 画框。下面的这个函数最后一个参数指定的就是画笔的大小 1cv2.rectangle(image,(x,y),(x+w,y+w),(0,255,0),2) Referencepython_opencv人脸检测]]></content>
+      <categories>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[2018-4-1_note]]></title>
+    <url>%2F2018%2F04%2F01%2F2018-4-1-note%2F</url>
+    <content type="text"><![CDATA[一天空白的一天，之前的笔记也忘了整理了。 opencv3.2 安装 查看opencv 版本pkg-config --modversion opencv 安装依赖 1sudo apt-get install build-essential libgtk2.0-dev libjpeg-dev libtiff5-dev libjasper-dev libopenexr-dev cmake libeigen3-dev yasm libfaac-dev libtheora-dev libx264-dev libv4l-dev libavcodec-dev libavformat-dev libswscale-dev libv4l-dev ffmpeg 下载opencv ，解压到某个目录下,进入目录 1cd opencv-*** 新建编译目录 12mkdir release cd release 编译 123 cmake -D MAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_OPENCL=OFF -D WITH_CUD A=OFF ..make 安装 1sudo make install 配置链接库 12sudo /bin/bash -c &apos;echo &quot;/usr/local/lib&quot; &gt; /etc/ld.so.conf.d/opencv.conf&apos;sudo ldconfig 验证，打开opencvtest文件夹 123 make./DisplayImage &lt;picture path here&gt;# 将 &lt;picture path here&gt; 替换为任意一张图片的路径 安装OpenCL1sudo apt-get install clinfo 安装cuda（之前安装好了） 安装与OpenCL有关的包 1sudo apt-get install nvidia-modprobe nvidia-libopencl1-&lt;version here&gt; nvidia-opencl-icd-&lt;version here&gt; nvidia-opencl-dev 坑ippicv_linux_20151201失败]]></content>
+      <categories>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[2018-3-31_note]]></title>
+    <url>%2F2018%2F03%2F31%2F2018-3-31-note%2F</url>
+    <content type="text"><![CDATA[一天上午写了一点毕设，下午啥也没干，晚上b站发现新大陆，看了一晚上李沐大神的视频关于目标检测的部分,等到看完完整的再总结一下吧。]]></content>
+      <categories>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[2018-3-30_note]]></title>
+    <url>%2F2018%2F03%2F30%2F2018-3-30-note%2F</url>
+    <content type="text"><![CDATA[毕设装texlive 好烦，装了好几次每次都安装一个多小时，然后失败。最后直接下载整个包，安装。明天争取写完 instruction和related work。 cnn下午看了一个cnn的推导过程，以及cnn怎样反向传播，看了两遍，推导公式推导一半就放弃。等到毕设搞完再推导。cnn全面讲解 Andrej Karpathy看了一篇李飞飞高徒 Andrej Karpathy写的博士生存指南,看的是翻译版.讲了一些写论文技巧和禁忌，还有一些人生。 李飞飞机器视觉公开课前两节水课，第三节讲了knn用于cifar.]]></content>
+      <categories>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[2018-3-28_note]]></title>
+    <url>%2F2018%2F03%2F28%2F2018-3-28-note%2F</url>
+    <content type="text"><![CDATA[差不多搞明白了yolov1的细节yolov1笔记 yolov2 codePytorch-YOLOv2好像有点复杂的一个有video?带可视化的v1可以用相机有点水的一个？还是带video]]></content>
+      <categories>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[2018-3-27_note]]></title>
+    <url>%2F2018%2F03%2F27%2F2018-3-27-note%2F</url>
+    <content type="text"><![CDATA[sublime + Latex参考latex在线公式编辑latex excel2latex在线生成latex表格 配置遇到问题 YOLOv1基础版本继续昨天的部分v1. model.py 部分有一个DarkNet类和YOLO类。当没有模型传入时，直接前部分网络使用Darknet,yolo又再后面加了几层。有训练好模型传入时，yolo在训练好的模型后面加入几层。（明天对比论文看一下是否每一层都是对应论文实现的） train.py 使用是通过没次迭代选取最好的一个模型保存 loss.py 计算出了类别概率，置信度，以及坐标，然后计算使用平方误差计算loss.YOLOv2 yolov2基础版yolov2 使用dataloader的数据读取方式 任务明天对比论文每一具体细节看一下v1的参数和置信度等计算方法。然后找一些v2简单版本的实现。]]></content>
+      <categories>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[2018-3-26_note]]></title>
+    <url>%2F2018%2F03%2F26%2F2018-3-26-note%2F</url>
+    <content type="text"><![CDATA[yolov1 简单版该版本只是实现了其中卷积层和全连接网络结构结构，并不是一个能真正运行的网络。1234567891011121314151617181920def __init__(self,S,B,C): super(yolo,self).__init__() self.output_dim=S*S*(B*5+C) self.layers1=BasicConv2d([(3,64,7,2,3)],True) self.layers2=BasicConv2d([(64,192,3,1,1)],True) self.layers3=BasicConv2d([(192,128,1,1,0),(128,256,3,1,1), (256,256,1,1,0),(256,512,3,1,1)],True) self.layers4=BasicConv2d([(512,256,1,1,0),(256,512,3,1,1), (512, 256, 1, 1,0), (256, 512, 3, 1,1), (512, 256, 1, 1,0), (256, 512, 3, 1,1), (512, 256, 1, 1,0), (256, 512, 3, 1,1), (512,512,1,1,0),(512,1024,3,1,1) ],True) self.layers5=BasicConv2d([(1024,512,1,1,0),(512,1024,3,1,1), (1024, 512, 1, 1,0), (512, 1024, 3, 1,1), (1024,1024,3,1,1),(1024,1024,3,2,1) ],False) self.layers6=BasicConv2d([(1024,1024,3,1,1),(1024,1024,3,1,1)],False) self.classifier=nn.Sequential(nn.Linear(7*7*1024,4096), nn.Linear(4096,self.output_dim)) 这一部分只是定义了一些网络参数，然后进行前向传播，在测试时反向传播一下。对于yolo中的细节并未进行详细实现。 yolov1 初级版代码部分由以下几个文件组成：数据部分由两部分，图片和标注，标注使用json格式 data.py阅读今天就看了数据读取和处理。数据格式如下，包括label,标注框的左上角x_y以及w_h。还包括图片形状和路径。数据处理部分包括以下几个函数 train_batches(batch_size=1, use_cuda=False)随机选取batch_size大小的下标返回这些下表对应的数据(get_datas) get_datas(idx, use_cuda=False)输入一组下表值，返回图像和标签(这个明天还要再看一下。。。) load_data(i)输入一个下表，返回该图片，以及[w,h,[标注信息],[。。。]] create_label(chunk) 123456789input: chunk chunk is list object. -&gt; [img_path, [w, h, [[label, xn, yn, xx, yx], [label, xn, yn, xx, yx], ..., [label, xn, yn, xx, yx]]] img_path: &quot;path_to_img/sample.jpg&quot;, w: image width, h: image height, label: object class, xn, yn: topleft coordinates, xx, yx: bottomright coordinates 返回的是图像，以及置信度信息，坐标信息等。 123456789y_true = &#123; &apos;class_probs&apos;: class_probs, &apos;confs&apos;: confs, &apos;coord&apos;: coord, &apos;proid&apos;: proid, &apos;areas&apos;: areas, &apos;upleft&apos;: upleft, &apos;bottomright&apos;: bottomright &#125; python 坑]]></content>
+      <categories>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[2018-3-25_note]]></title>
+    <url>%2F2018%2F03%2F25%2F2018-3-25-note%2F</url>
+    <content type="text"><![CDATA[python 广播广播的原则：如果两个数组的后缘维度（trailing dimension从末尾开始算起的维度）的轴 长度相符或者其中一方为1，那么认为是广播兼容的。广播会在缺失和（或）长度为1的维度上进行。 根据广播的原.则，较小数组的广播维必须为1。于是就有了一个很普遍的问题，即为了广播专门增加一个新的长度为1的维度。 tensorflow的bool_mask(tensor,mask,axis=0)tensorflow源码1234567891011Args: tensor: N-D tensor. mask: K-D boolean tensor, K &lt;= N and K must be known statically. name: A name for this operation (optional). axis: A 0-D int Tensor representing the axis in `tensor` to mask from. By default, axis is 0 which will mask from the first dimension. Otherwise K + axis &lt;= N.Returns: (N-K+1)-dimensional tensor populated by entries in `tensor` corresponding to `True` values in `mask`. pytorch中使用selected_mask()得到的是一个一维tensor,所以view一下就可以得到类似的结果（tensor二维时验证没问题）。 nms计算12345678910111213141516171819202122232425262728293031323334353637#coding:utf-8 import numpy as np def py_cpu_nms(dets, thresh): """Pure Python NMS baseline.""" x1 = dets[:, 0] y1 = dets[:, 1] x2 = dets[:, 2] y2 = dets[:, 3] scores = dets[:, 4] #bbox打分 areas = (x2 - x1 + 1) * (y2 - y1 + 1) #打分从大到小排列，取index order = scores.argsort()[::-1] #keep为最后保留的边框 keep = [] while order.size &gt; 0: #order[0]是当前分数最大的窗口，肯定保留 i = order[0] keep.append(i) #计算窗口i与其他所有窗口的交叠部分的面积 xx1 = np.maximum(x1[i], x1[order[1:]]) yy1 = np.maximum(y1[i], y1[order[1:]]) xx2 = np.minimum(x2[i], x2[order[1:]]) yy2 = np.minimum(y2[i], y2[order[1:]]) w = np.maximum(0.0, xx2 - xx1 + 1) h = np.maximum(0.0, yy2 - yy1 + 1) inter = w * h #交/并得到iou值 ovr = inter / (areas[i] + areas[order[1:]] - inter) #inds为所有与窗口i的iou值小于threshold值的窗口的index，其他窗口此次都被窗口i吸收 inds = np.where(ovr &lt;= thresh)[0] #order里面只保留与窗口i交叠面积小于threshold的那些窗口，由于ovr长度比order长度少1(不包含i)，所以inds+1对应到保留的窗口 order = order[inds + 1] return keep 实现逻辑 按打分最高到最低将BBox排序 ，例如：A B C D E F A的分数最高，保留。从B-E与A分别求重叠率IoU，假设B、D与A的IoU小于阈值，那么B和D可以认为是重复标记去除 余下C E F，重复前面两步。 问题这份网易课堂的搞不定了。弃坑。在github上有两份yolov1最简单 yolov1有可视化 yolov1模型适中的代码不长，效果一般，但是先搞一遍再说。]]></content>
+      <categories>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[2018-3-24_note]]></title>
+    <url>%2F2018%2F03%2F24%2F2018-3-24-note%2F</url>
+    <content type="text"><![CDATA[被pytorch和tensorflow毒害的一天首先是一个关于python广播的问题。a = torch.randn(3,1).abs_()b = torch.ByteTensor([1,0,1]) #b形状为（3，）b = torch.unsqueeze(b,-1) #b形状为（3，1）a = torch.randn(3,4)c = torch.masked_select(a,b) # 此时可以在列上广播# 当b的形状为（3，）不能在列上广播。# 关于python广播机制，明天做个总结tensorflow中的argmax()和max()函数，在pytorch中可以用max()代替 yolo filter_boxes对于昨天计算box_score做验证1234567891011121314151617def yolo_filter_boxes(box_confidence,boxes,box_class_probs,threshold=0): box_score = box_confidence * box_class_probs box_class_scores,box_classes = torch.max(box_score,dim=-1) filtering_mask = box_class_scores &gt;= threshold filtering_mask = torch.unsqueeze(filtering_mask,dim=-1)# print(filtering_mask) scores = torch.masked_select(box_class_scores,filtering_mask) boxes = torch.masked_select(boxes, filtering_mask) classes = torch.masked_select(box_classes, filtering_mask) return scores, boxes,classesbox_confidence = torch.randn([19,19,5,1])boxes = torch.randn([19,19,5,4])box_class_probs = torch.randn([19,19,5,80])scores,boxes,classes = yolo_filter_boxes(box_confidence,boxes,box_class_probs,threshold=0.5) 比较难受的是tf.boolean_mask()，和pytorch的masked_select（）的广播机制，明天在好好看看。目前通过将pytorch将mask增加一个维度解决不能广播的问题 一些问题pytorch 没有reshape,用view代替reshape。pytorch unsqueeze可以增加一个维度，squeeze可以压缩维度。pytorch masked_select()可以通过bool矩阵选取元素。pytorch max() 返回值第一个是按某个维度的最大值，第二个是对应下标。 感慨翻着文档从pytorch中找到tensorflow的替代函数好难啊。不知道有啥简洁点的方式。]]></content>
+      <categories>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[2018-3-23_note]]></title>
+    <url>%2F2018%2F03%2F23%2F2018-3-23-note%2F</url>
+    <content type="text"><![CDATA[anchor box看不懂，明天再说。实在不理解，也没找到讲得好的博客。 吴恩达cnn课程编程作业关于模型识别类别有80类 输入时一个batch的图片，所以输入形状为（m,608,608,3）m为batch_size. 对于每个bbox(bounding box,这里为19*19)输出为一个85维向量（$p_c,b_x,b_y,b_h,b_w,c$,）其中c是80维向量指的是类别，$p_c$表示该box是否存在object。 然后对于每个bbox有5个anchor boses.相当于对每个bbox,预测5个boxes.所以结构流程为IMAGE(m,608,608,3)-&gt;DEEP CNN-&gt;ENCODING(m,19,19,5,85).计算scorescore = pc*c ：逐点相乘 使用threshold 在score上进行过滤几个参数意义： box_confidence: box的置信度，表示box是否含有object，形状为（19*19,5,1）. boxes: boxes的信息( $b_x,b_y,b_h,b_w$ ).形状为（19*19,5,4） box_class_probs: 5个anchor在80个类别上的预测概率，形状为（19*19,5,80）.]]></content>
+      <categories>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[2018_3_22_note]]></title>
+    <url>%2F2018%2F03%2F22%2F2018-3-22-note%2F</url>
+    <content type="text"><![CDATA[coursera cnn编程作业不能使用coursera，所以在csdn上找到了作业。作业目的是搭建一个yolo网络，使用预训练网络测试一些图片。今天大概看了一下流程，明天开始写代码。因为coursera上使用的是keras,但是准备使用pytorch实现。 一个有趣的小项目从零开始码一个皮卡丘检测器。网络使用的是ssd，讲解的内容很详细。有空看。 有趣的发现今天重新使用yolo跑原始demo时，发现之前demo中nms效果不好的现象消失了，而且更改nms的iou阈值也有效果了。然后又跑回红外的的图片发现可以去除多余的框了，但是剩余的结果并不好，所以之前并不是nms没做好，还是网络有问题。 Reference[1]: 吴恩达cnn编程作业[2]: python使用yolo[3]: 从零开始码一个皮卡丘检测器]]></content>
+      <categories>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[2018-03-20-网易云吴恩达卷积神经网络]]></title>
+    <url>%2F2018%2F03%2F20%2F2018-03-20-%E7%BD%91%E6%98%93%E4%BA%91%E5%90%B4%E6%81%A9%E8%BE%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%2F</url>
+    <content type="text"><![CDATA[吴恩达卷积神经网络课程课程主要是基础概念的普及.网易云课堂课程地址为卷积神经网络.该课程分为4部分，主要看了第一，三部分。 卷积神经网络 深度卷积网络实例 目标检测 人脸识别和风格转换等应用 卷积神经网络该部分主要有介绍了边缘检测和卷积的基本概念，以及简单示例。一个关于卷积网络的细节，输入三通道图片，卷积核使用也是三通道，但是有时候书写只用3 * 3表示 目标检测目标检测部分讲解了yolo的一些部件，IOU，nms，anchor box。IOU（预测box和实际box的交集 / 并集），IOU越大，边界框预测越准确，IOU 一般没有小于0.5的。nms（非极大值抑制），就是抑制不是极大值的。参考整个流程：首先计算出所有窗口的面积，对所有窗口的分数进行从小到大排序取出最高分数的序号。循环计算1到次高分数窗口与最高分数窗口的交叉面积与两者间最小面积的比例，若小于thresh,那么把这一窗口保留之后进入下一轮。123456789101112131415161718192021222324252627282930313233343536373839# --------------------------------------------------------# Fast R-CNN# Copyright (c) 2015 Microsoft# Licensed under The MIT License [see LICENSE for details]# Written by Ross Girshick# --------------------------------------------------------import numpy as npdef py_cpu_nms(dets, thresh): """Pure Python NMS baseline.""" x1 = dets[:, 0] y1 = dets[:, 1] x2 = dets[:, 2] y2 = dets[:, 3] scores = dets[:, 4] areas = (x2 - x1 + 1) * (y2 - y1 + 1) order = scores.argsort()[::-1] keep = [] while order.size &gt; 0: i = order[0] keep.append(i) xx1 = np.maximum(x1[i], x1[order[1:]]) yy1 = np.maximum(y1[i], y1[order[1:]]) xx2 = np.minimum(x2[i], x2[order[1:]]) yy2 = np.minimum(y2[i], y2[order[1:]]) w = np.maximum(0.0, xx2 - xx1 + 1) h = np.maximum(0.0, yy2 - yy1 + 1) inter = w * h ovr = inter / (areas[i] + areas[order[1:]] - inter) inds = np.where(ovr &lt;= thresh)[0] order = order[inds + 1] return keep 遇到问题 在yolo训练时好像没有用到nms？ 在yolo使用nms时有两个阈值，置信度阈值和nms的iou阈值]]></content>
+      <categories>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+        <tag>MLDL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[总结及其展望]]></title>
+    <url>%2F2018%2F03%2F09%2F%E5%A4%A7%E5%9B%9B%E6%80%BB%E7%BB%93%E5%8F%8A%E5%85%B6%E5%B1%95%E6%9C%9B%2F</url>
+    <content type="text"><![CDATA[因缘交错的开始与结束机缘巧合，高考志愿中在某两个学校中间加上了中大。又是机缘巧合来到了曾移动信息工程学院（实际上吧，是第一个志愿，只是不知道这竟然是调剂大院）。开学来了之后看到学院培养计划，发现正对胃口。然后就毫无悬念的进入了迷茫的开始。……等到现在再去回首看的时候，感觉自己四年做了好少东西，有点后悔当初怎么就不能静下心来学习。但是我知道，如果再给我一次机会，我还是会像曾经这样度过。 一无所知的大一刚进学校时有些许搞笑，一个竟然只会电脑开机的人报了计算机的方向。大一一整年，别人学习怎么做算法，而我是学着怎么用电脑。还好室友都愿意帮我，教我怎么用浏览器，怎么下载东西，怎么安装应用还告诉我尽量要自定义安装，不要全部安装在c盘……等等这一系列的别人认为理所应当每个人肯定会的东西。大一上课也遇到一些特别好的TA，CQL啊，CMD啊挺多的，但是也有很多会告诉你，你google一下就有了。哎……。印象最深刻的就是一个循环输入很多样例的算法题，因为自己也描述不清楚问题，所以就有的TA说while啊。我说我知道，但是不知道样例个数怎么停呢，他说ctrl-c。对于这种问一句答一句的TA，我只想说，我太傻。当时问了好几个TA好几天都还是不懂，差点绝望，直到死皮赖脸的问到CMD，虽然他也没懂我在描述啥，但是他告诉我这种题目怎么做，从头到尾，当他说到while(cin&gt;&gt;)时，我才知道这样啊。CQL也是特别热心的TA。不是遇到这两个人，估计我要辍学了。真的顶不住这种压力。因为某些原因，本来整个人就处于特别低谷的状态。所以已经不是每个月有那么几天了，每周都有那么几天，心情像***。感觉整个人都是废的。就这样浑浑噩噩的过完了大一。来到了暑假。暑假提前一个月去了学校，没有人，自己没明没夜看来20天海贼王，七八百集看了一遍。然后突然感觉我好像忘了最初自己的样子。写了个座右铭：好想回到过去，问问小时候的自己，现在的我，你可满意。假期最后一个阶段，开始学习，当时迷上了hacker，在红盟论坛当时学到了好多东西，知道了ubuntu系统，装上了虚拟机，看到有个东西叫python。原来还有这么多好玩的东西。 准备开始学习的大二大二一开学就和一个室友加入了一个CL老师的实验室。进入实验室老师让我们了解DL(深度学习)，ML(机器学习的东西)。感觉挺好玩的东西，当时去听一听大三和大四师兄的分享。感觉他们好厉害。当时一开始接触就去学习一个叫caffe的框架，哈哈，除了官方文档一篇博客都没有。当时为了配CUDA，重装了无数次电脑，幸亏暑假学会了装电脑，也接触一点Ubuntu（现在cuda好配多了）。就这样在上课和接触DL相关知识中度过。然后到了紧张的大二下，课程塞的满满的，除了上课就是在上课的路上。实验室根本没时间去，只有周末偶尔去，然后慢慢的周末要做作业，也没时间。渐渐的就没去了。一个紧张但是碌碌无为的大二就过去了，进入暑假，来到建筑工地打工，几个字简单描述，40多度高温，住铁皮房，没空调，早上四点起，晚上睡不着。其实吧，我只是来这里找一下虐，并没有干活。 大三分水岭经过一个暑假的找虐，和我弟聊天说想赶紧毕业出去挣钱，我弟说他也是。然后就又开始了大三上的生活，为了大三下就能去实习，所以把课选完了，这真是一个错误的决定，累死了。然后同时也发现之前老师的深度学习的那个组好像没人说话，他们应该也转移到其他小组了，所以也就没好意思再去找老师。就这样天天上课勉强度过了大三上。在寒假，和我弟聊天，大家有一致决定想好好学习，于是决定读个研。但是当时绩点有点低，和一个同学又去了HK老师这里，说了自己的想法，然后就决定参加一些比赛，发一些论文来争取一些加分。由于大三上愚蠢的决定，导致大三下没课，所以整个大三下在准备论文和比赛中度过。有点轻松，这个过程中由于一直关注着AI方向的发展，见证了caffe从没有一份博客到到处都是文档（有点后悔没坚持，不然说不定就是大佬了）。然后在这半年中系统学了一下python。然后大三上跟着CL博士师兄发了两篇文章。接着就到7月份一直在准备无人船比赛，有点难受，由于船比较大，调试船要跑到一个漏天水库，广州的夏天室外温度有点高，小组几个人每天都是轻微中暑。到7月底去上海参加了比赛，哎……效果也就那样吧，参与第一，开心就好。比赛完回来8月中旬了快，感觉自己保研无望了，就开始了复习准备考一下，赶紧进入了紧张的复习，高数线代英语先复习起来，复习完半个月，赶紧又买了计算机四大金刚相关书籍。9月份这段时间开始准备保研材料，还是不知羞耻的提交了。但是由于参加的无人船时间是7月份，保研要求只计算6月份之前的，有点担忧。然后过不久出保研结果，综绩4.0勉强过了。(虽然无人船比赛还是没有能加上分，能加0.3的，有点想哭，但是不重要了)然后面试一切结束之后，感觉就像自己准备半个月考研，然后得知考上了，心情有点复杂。总之接下来就大四了。 又陷入迷茫的现在？大四上开始正式进入实验室做事，因为大一感觉到TA对人的影响，所以趁着自己有时间同时有机会，所以申请了嵌入式课程的TA。很开心的去上了几周课。然后10月份因为得知11月底在苏州常熟要举办无人车未来挑战赛，由于主办方需要我们实验室的一些帮助，所以临时被发配。在常熟的这段时间，过的很开心，因为这里有一群性格特别合适的人。在比赛的三天中由于作为裁判虽然忙的吃不上饭，但是还是很开心，亲眼目睹了跑的特别好的无人车，也目睹了好几起撞车事故。经过慎重慎重给每辆车打分的过程还是很紧张的。比赛结束后，回到了学校又继续其他项目的参与。然后就是到现在了。现在每天都是在学习新的东西，每天都是在这篇文章看不懂，这份代码不会改中度过，有点紧张有点慌，但是没办法，还是要看……没啥说的，以后在回忆。 理想？未来？命是弱者的接口运是强者的谦辞。说实话，不是很懂命运是啥，但是我知道一句话，谋事在人成事在天。至于将来到底是继续向上读，还是趁早工作，也是是很敢说。但是我知道做好现在的自己，将来已来时，做出心中的选择就行了。]]></content>
+      <categories>
+        <category>感想</category>
+      </categories>
+      <tags>
+        <tag>感想</tag>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[2018-2-1 YOLO 网络]]></title>
+    <url>%2F2018%2F02%2F01%2F2018-2-1-YOLO-%E7%BD%91%E7%BB%9C%2F</url>
+    <content type="text"><![CDATA[YOLO 网络yolo网络学习的参考博客 YOLO_v1论文地址 YOLO_v2论文地址 图解YOLO YOLO论文解读笔记1 YOLO论文解读笔记2 YOLO论文源码解析tensorflow 实现YOLO下载使用的版本为 yolo_tensorflow。github上还有另外两版 tensorflow_yolo 和 yolo-tf。此外还有一款基于Pytorch实现的yolo_v2 yolo2-pytorch，pytorch 版本的项目目前在持续维护中，被推荐使用该版本。 YOLO 学习YOLO论文中文翻译翻译质量有点差。YOLO_v2中文翻译文章目前还没看懂。 效果使用别人训练的模型，并没有什么效果。 遇到问题 使用tensorflow时出现’module object has no attribute ‘contrib’’问题。解决方式是更新tensorflow 版本到1.0以上pip install --upgrade tensorflow-gpu或者pip install --upgrade tensorflow。参考 python3导入cv2时和ros冲突。解决方式是暂时屏蔽ros里的opencv，需要用ros的话还得改回来. 1gedit /home/abner/.bashrc 注释掉最后几行中的 1source /opt/ros/kinetic/setup.bash 保存之后source 然后重启终端 1source ~/.bashrc]]></content>
+      <categories>
+        <category>note</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+        <tag>MLDL</tag>
+      </tags>
+  </entry>
+</search>
